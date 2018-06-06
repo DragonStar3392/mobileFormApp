@@ -5,6 +5,7 @@
     <string name = "Username">Username</string>
     <string name = "Password">Password</string>
     <string name = "GEL">GEL</string>
+    <string name = "Ok">Ok</string>
     <string name = "Cancel">Cancel</string>
     <string name = "Exit">Exit</string>
     <string name = "Task">Task</string>
@@ -13,6 +14,7 @@
 
     <string name = "Transport">Transport</string>
     <string name = "Date">Date</string>
+    <string name = "projectGroup">Proj. Group</string>
     <string name = "projectNo">Project No.</string>
     <string name = "Item">Item</string>
     <string name = "Qty">Qty</string>
