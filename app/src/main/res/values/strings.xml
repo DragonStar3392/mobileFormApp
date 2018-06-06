@@ -9,6 +9,8 @@
     <string name = "Exit">Exit</string>
     <string name = "Task">Task</string>
 
+    <string name = "Select">Select</string>
+
     <string name = "Transport">Transport</string>
     <string name = "Date">Date</string>
     <string name = "projectNo">Project No.</string>

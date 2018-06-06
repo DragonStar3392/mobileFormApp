@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="522dp"
+        android:layout_width="574dp"
         android:layout_height="51dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
@@ -28,33 +28,69 @@
             android:id="@+id/projnoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/projectNo"
-            app:layout_constraintStart_toEndOf="@+id/dateSpinner"
+            app:layout_constraintStart_toEndOf="@+id/divider"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/dateSpinner"
-            android:layout_width="145dp"
-            android:layout_height="24dp"
+        <TextView
+            android:id="@+id/dateDisplay"
+            android:layout_width="104dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toEndOf="@+id/dateText"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/projSpinner"
-            android:layout_width="145dp"
+        <TextView
+            android:id="@+id/projnoDisplay"
+            android:layout_width="99dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.066"
             app:layout_constraintStart_toEndOf="@+id/projnoText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/dateB"
+            android:layout_width="84dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/Select"
+            app:layout_constraintStart_toEndOf="@+id/dateDisplay"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+            <!--android:onClick="datePicker"-->
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/dateB"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/projB"
+            android:layout_width="85dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/Select"
+            app:layout_constraintStart_toEndOf="@+id/projnoDisplay"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
