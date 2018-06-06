@@ -61,72 +61,64 @@
 
     <ScrollView
         android:layout_width="589dp"
-        android:layout_height="203dp"
+        android:layout_height="206dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="38dp">
 
-        <LinearLayout
+        <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-        </LinearLayout>
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="78dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <!--android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"-->
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Item" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Qty" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabSite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Site" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabWH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/WH" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Location" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabBatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Batch" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabSerial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Serial" />
+        </android.support.design.widget.TabLayout>
     </ScrollView>
 
-    <android.support.design.widget.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="78dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <!--android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"-->
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Item" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabQty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Qty" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabSite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Site" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabWH"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/WH" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Location" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabBatch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Batch" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/tabSerial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Serial" />
-    </android.support.design.widget.TabLayout>
 </RelativeLayout>
