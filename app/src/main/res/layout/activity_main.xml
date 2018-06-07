@@ -13,7 +13,10 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/taskText"
@@ -23,7 +26,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="24dp"
             android:text="@string/Task"
             android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,32 +38,32 @@
             android:id="@+id/transportB"
             android:layout_width="213dp"
             android:layout_height="96dp"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="44dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="44dp"
             android:text="@string/Transport"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/taskText" />
+            app:layout_constraintTop_toBottomOf="@+id/taskText"
+            app:layout_constraintVertical_bias="0.137" />
 
         <Button
             android:id="@+id/installationB"
             android:layout_width="208dp"
-            android:layout_height="89dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="56dp"
+            android:layout_height="97dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginRight="44dp"
+            android:layout_marginTop="44dp"
             android:text="@string/Installation"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/transportB" />
+            app:layout_constraintTop_toBottomOf="@+id/taskText"
+            app:layout_constraintVertical_bias="0.14" />
 
     </android.support.constraint.ConstraintLayout>
 

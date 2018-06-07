@@ -6,12 +6,15 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,21 +24,21 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:parentActivityName=".LoginActivity">
+            android:screenOrientation="landscape">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".LoginActivity" />
         </activity>
         <activity
             android:name=".TransportActivity"
-            android:parentActivityName=".MainActivity">
+            android:screenOrientation="landscape">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".InstallmentActivity"
-            android:parentActivityName=".MainActivity">
+            android:screenOrientation="landscape">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity" />
