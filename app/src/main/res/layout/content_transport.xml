@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true">
 
         <TextView
@@ -132,7 +133,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <ScrollView
-        android:layout_width="573dp"
+        android:layout_width="580dp"
         android:layout_height="160dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -143,18 +144,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <de.codecrafters.tableview.SortableTableView
                 android:id="@+id/transportTable"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:paddingEnd="1dp"
                 app:paddingStart="1dp"
                 app:tableView_columnCount="7" />
@@ -168,9 +166,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        style="?android:attr/buttonBarStyle">
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/okB"
             android:layout_width="66dp"
             android:layout_height="38dp"
@@ -178,6 +178,7 @@
             android:text="@string/Ok"/>
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/cancelB"
             android:layout_width="wrap_content"
             android:layout_height="38dp"

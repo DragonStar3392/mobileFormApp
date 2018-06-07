@@ -68,7 +68,7 @@ public class TransportActivity extends Activity {
         };
 
         table = (SortableTableView<String>) findViewById(R.id.transportTable);
-        initTable();
+        //initTable();
 
     }
 
