@@ -16,7 +16,10 @@ import java.util.Collections;
 import java.util.List;
 
 import de.codecrafters.tableview.SortableTableView;
+import de.codecrafters.tableview.TableDataAdapter;
+import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 import com.test.mobile.data.Item;
@@ -68,7 +71,7 @@ public class TransportActivity extends Activity {
         };
 
         table = (SortableTableView<String>) findViewById(R.id.transportTable);
-        //initTable();
+        initTable();
 
     }
 
@@ -89,6 +92,20 @@ public class TransportActivity extends Activity {
         table.setColumnModel(columnModel);
 
         //Add option to table.
+        itemList = new ArrayList<Item>();
+        itemList.add(new Item("Test1",3,"Bangkok","01",1,1,111));
+        itemList.add(new Item("Test2",1,"Samui","02",2,2,132));
+        itemList.add(new Item("Test3",2,"SS","02",1,2,221));
+        itemList.add(new Item("Test4",6,"S","03",4,4,512));
+        itemList.add(new Item("Test5",90,"EW","04",3,3,432));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+
+//        String[][] DATA_TO_SHOW = { { "This", "is", "a", "test" },
+//                { "and", "a", "second", "test" } };
+//        String header[]  = {"Item","Qty", "Site", "WH"};
+//        table.setDataAdapter(new SimpleTableDataAdapter(this, DATA_TO_SHOW));
+//        table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, header));
+//
         itemTableDataAdapter = new itemTableDataAdapter(this, itemList, table);
         table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, itemTableDataAdapter.getHeaderData()));
         table.setDataAdapter(itemTableDataAdapter);
@@ -96,6 +113,8 @@ public class TransportActivity extends Activity {
         table.setColumnComparator(1, itemComparator.qtyComparator);
         table.setColumnComparator(2, itemComparator.siteComparator);
         table.setColumnComparator(5, itemComparator.batchComparator);
+
+
     }
 
     /**

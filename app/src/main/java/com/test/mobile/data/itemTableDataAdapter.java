@@ -30,7 +30,7 @@ public class itemTableDataAdapter extends TableDataAdapter<Item> {
                 renderedView = renderString(item.getName());
                 break;
             case 1:
-                renderedView = renderString(String.format("%4d", item.getQuantity()));
+                renderedView = renderString(String.format("%d", item.getQuantity()));
                 break;
             case 2:
                 renderedView = renderString(item.getSite());
