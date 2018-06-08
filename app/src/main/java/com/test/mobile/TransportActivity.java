@@ -99,6 +99,12 @@ public class TransportActivity extends Activity {
         itemList.add(new Item("Test4",6,"S","03",4,4,512));
         itemList.add(new Item("Test5",90,"EW","04",3,3,432));
         itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
 
 //        String[][] DATA_TO_SHOW = { { "This", "is", "a", "test" },
 //                { "and", "a", "second", "test" } };
