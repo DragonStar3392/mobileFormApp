@@ -106,12 +106,6 @@ public class TransportActivity extends Activity {
         itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
         itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
 
-//        String[][] DATA_TO_SHOW = { { "This", "is", "a", "test" },
-//                { "and", "a", "second", "test" } };
-//        String header[]  = {"Item","Qty", "Site", "WH"};
-//        table.setDataAdapter(new SimpleTableDataAdapter(this, DATA_TO_SHOW));
-//        table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, header));
-//
         itemTableDataAdapter = new itemTableDataAdapter(this, itemList, table);
         table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, itemTableDataAdapter.getHeaderData()));
         table.setDataAdapter(itemTableDataAdapter);
