@@ -32,6 +32,12 @@ public class TransportActivity extends Activity {
     private Button mDisplayDateB;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
+    private TextView displayProjG;
+    private Button displayProjGB;
+
+    private TextView displayProjNo;
+    private Button displayProjNoB;
+
     private SortableTableView table;
     private List<Item> itemList;
     private itemTableDataAdapter itemTableDataAdapter;
@@ -43,7 +49,13 @@ public class TransportActivity extends Activity {
         mDisplayDate = (TextView) findViewById(R.id.dateDisplay);
         mDisplayDateB = (Button) findViewById(R.id.dateB);
 
-        //Date selection
+        displayProjG = (TextView) findViewById(R.id.projgroupDisplay);
+        displayProjGB = (Button) findViewById(R.id.projGroupB);
+
+        displayProjNo = (TextView) findViewById(R.id.projnoDisplay);
+        displayProjNoB = (Button) findViewById(R.id.projNoB);
+
+        //Date selection---------------------------------------------------------------------------
         mDisplayDateB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -69,9 +81,19 @@ public class TransportActivity extends Activity {
                 mDisplayDate.setText(date);
             }
         };
-
+        //-----------------------------------------------------------------------------------------
+        displayProjGB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //connect to firebase to get data
+                //display data for use to choose
+            }
+        });
+        //-----------------------------------------------------------------------------------------
         table = (SortableTableView<String>) findViewById(R.id.transportTable);
         initTable();
+        //update table here, firebase?
+
 
     }
 
@@ -120,8 +142,8 @@ public class TransportActivity extends Activity {
     /**
      * Get the order from menu list that quantity isn't zero
      *
-     * @param itemList List of FoodItem (itemList)
-     * @return ArrayList of FoodItem that quantity isn't zero
+     * @param itemList List of Item (itemList)
+     * @return ArrayList of Item that quantity isn't zero
      */
     private ArrayList<Item> getOrderedList(List<Item> itemList) {
         ArrayList<Item> orderList = new ArrayList<>();
