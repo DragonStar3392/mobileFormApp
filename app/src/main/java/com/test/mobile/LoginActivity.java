@@ -38,6 +38,7 @@ public class LoginActivity extends Activity  {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            System.out.println(response);
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if(success){
