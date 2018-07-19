@@ -1,17 +1,19 @@
 package com.test.mobile.data;
 
 public class Item {
+    private int id = 0;
     private String name;
     private int quantity = 0;
     private String site;
     private String WH;//warehouse
-    private int location = 0;
-    private int batch = 0;
-    private int serial = 0;
+    private String location;
+    private String batch;
+    private String serial;
 
-    public Item(String name, int quantity,
-                String site, String WH, int location,
-                int batch, int serial) {
+    public Item(int autoNum, String name, int quantity,
+                String site, String WH, String location,
+                String batch, String serial) {
+        this.id = autoNum;
         this.name = name;
         this.quantity = quantity;
         this.site = site;
@@ -19,6 +21,14 @@ public class Item {
         this.location = location;
         this.batch = batch;
         this.serial = serial;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -53,33 +63,33 @@ public class Item {
         this.WH = WH;
     }
 
-    public int getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(int location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public int getBatch() {
+    public String getBatch() {
         return batch;
     }
 
-    public void setBatch(int batch) {
+    public void setBatch(String batch) {
         this.batch = batch;
     }
 
-    public int getSerial() {
+    public String getSerial() {
         return serial;
     }
 
-    public void setSerial(int serial) {
+    public void setSerial(String serial) {
         this.serial = serial;
     }
 
     @Override
     public String toString() {
-        return String.format("\nItem:%s, qty:%d, site:%s, WH:%s, Loc:%d, batch:%d, serial:%d",
-                name,quantity,site,WH,location,batch,serial);
+        return String.format("\n%d: Item:%s, qty:%d, site:%s, WH:%s, Loc:%s, batch:%s, serial:%s",
+                id,name,quantity,site,WH,location,batch,serial);
     }
 }

@@ -6,10 +6,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.nio.channels.NetworkChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -32,11 +35,8 @@ public class TransportActivity extends Activity {
     private Button mDisplayDateB;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    private TextView displayProjG;
-    private Button displayProjGB;
-
-    private TextView displayProjNo;
-    private Button displayProjNoB;
+    private Spinner pGroupSP;
+    private Spinner pNoSP;
 
     private SortableTableView table;
     private List<Item> itemList;
@@ -49,11 +49,8 @@ public class TransportActivity extends Activity {
         mDisplayDate = (TextView) findViewById(R.id.dateDisplay);
         mDisplayDateB = (Button) findViewById(R.id.dateB);
 
-        displayProjG = (TextView) findViewById(R.id.projgroupDisplay);
-        displayProjGB = (Button) findViewById(R.id.projGroupB);
-
-        displayProjNo = (TextView) findViewById(R.id.projnoDisplay);
-        displayProjNoB = (Button) findViewById(R.id.projNoB);
+        pGroupSP = (Spinner) findViewById(R.id.projGspinner);
+        pNoSP = (Spinner) findViewById(R.id.projNospinner);
 
         //Date selection---------------------------------------------------------------------------
         mDisplayDateB.setOnClickListener(new View.OnClickListener(){
@@ -82,14 +79,26 @@ public class TransportActivity extends Activity {
             }
         };
         //-----------------------------------------------------------------------------------------
-        displayProjGB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //connect to firebase to get data
-                //display data for use to choose
-            }
-        });
-        //-----------------------------------------------------------------------------------------
+//        pGroupSP.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ArrayAdapter groupA = new ArrayAdapter(this,android.R.layout.simple_spinner_item,bankNames);
+//                groupA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                //Setting the ArrayAdapter data on the Spinner
+//                pGroupSP.setAdapter(groupA);
+//            }
+//        });
+//        //-----------------------------------------------------------------------------------------
+//        pNoSP.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //-----------------------------------------------------------------------------------------
+//                ArrayAdapter pNoA = new ArrayAdapter(this,android.R.layout.simple_spinner_item,bankNames);
+//                pNoA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                //Setting the ArrayAdapter data on the Spinner
+//                pNoSP.setAdapter(pNoA);
+//            }
+//        });
         table = (SortableTableView<String>) findViewById(R.id.transportTable);
         initTable();
         //update table here, firebase?
@@ -115,26 +124,29 @@ public class TransportActivity extends Activity {
 
         //Add option to table.
         itemList = new ArrayList<Item>();
-        itemList.add(new Item("Test1",3,"Bangkok","01",1,1,111));
-        itemList.add(new Item("Test2",1,"Samui","02",2,2,132));
-        itemList.add(new Item("Test3",2,"SS","02",1,2,221));
-        itemList.add(new Item("Test4",6,"S","03",4,4,512));
-        itemList.add(new Item("Test5",90,"EW","04",3,3,432));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
-        itemList.add(new Item("Test6",43,"Jg","03",3,4,2322));
+        itemList.add(new Item(1,"Test1",3,"Bangkok","01","1","1","111"));
+        itemList.add(new Item(2,"Test2",1,"Samui","02","2","2","132"));
+        itemList.add(new Item(3,"Test3",2,"SS","02","1","2","221"));
+        itemList.add(new Item(4,"Test4",6,"S","03","4","4","512"));
+        itemList.add(new Item(5,"Test5",90,"EW","04","3","3","432"));
+        itemList.add(new Item(6,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(7,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(8,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(9,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(10,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(11,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(12,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(13,"Test6",43,"Jg","03","3","4","2322"));
+        itemList.add(new Item(14,"Test6",43,"Jg","03","3","4","2322"));
 
         itemTableDataAdapter = new itemTableDataAdapter(this, itemList, table);
         table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, itemTableDataAdapter.getHeaderData()));
         table.setDataAdapter(itemTableDataAdapter);
-        table.setColumnComparator(0, itemComparator.nameComparator);
-        table.setColumnComparator(1, itemComparator.qtyComparator);
-        table.setColumnComparator(2, itemComparator.siteComparator);
-        table.setColumnComparator(5, itemComparator.batchComparator);
+        table.setColumnComparator(0, itemComparator.idComparator);
+        table.setColumnComparator(1, itemComparator.nameComparator);
+        table.setColumnComparator(2, itemComparator.qtyComparator);
+        table.setColumnComparator(3, itemComparator.siteComparator);
+        table.setColumnComparator(6, itemComparator.batchComparator);
 
 
     }

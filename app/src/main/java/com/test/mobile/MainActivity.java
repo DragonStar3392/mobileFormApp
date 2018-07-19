@@ -17,6 +17,9 @@ public class MainActivity extends Activity{
         b1 = (Button)findViewById(R.id.transportB);;
         b2 = (Button)findViewById(R.id.installationB);
 
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("username");
+
         b1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

@@ -13,6 +13,13 @@ public class itemComparator {
         }
     };
 
+    public static Comparator<Item> idComparator = new Comparator<Item>() {
+        @Override
+        public int compare(Item o1, Item o2) {
+            return o1.getId() - (o2.getId());
+        }
+    };
+
     public static Comparator<Item> qtyComparator = new Comparator<Item>() {
         @Override
         public int compare(Item o1, Item o2) {
@@ -30,7 +37,7 @@ public class itemComparator {
     public static Comparator<Item> batchComparator = new Comparator<Item>() {
         @Override
         public int compare(Item o1, Item o2) {
-            return o1.getBatch() - (o2.getBatch());
+            return o1.getBatch().compareTo(o2.getBatch());
         }
     };
 
