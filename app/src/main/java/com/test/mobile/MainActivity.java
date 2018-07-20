@@ -14,32 +14,29 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        b1 = (Button)findViewById(R.id.transportB);;
+        b1 = (Button)findViewById(R.id.transportB);
         b2 = (Button)findViewById(R.id.installationB);
 
         Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
+        final String username = intent.getStringExtra("username");
 
+        //passing on username for next use
         b1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                toTransport();
+                Intent intent = new Intent(MainActivity.this, TransportActivity.class);
+                intent.putExtra("username", username);
+                MainActivity.this.startActivity(intent);
             }
         });
 
         b2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                toInstallation();
+                Intent intent = new Intent(MainActivity.this, InstallmentActivity.class);
+                intent.putExtra("username", username);
+                MainActivity.this.startActivity(intent);
             }
         });
-    }
-    public void toTransport(){
-        Intent intent = new Intent(MainActivity.this, TransportActivity.class);
-        startActivity(intent);
-    }
-    public void toInstallation(){
-        Intent intent = new Intent(MainActivity.this, InstallmentActivity.class);
-        startActivity(intent);
     }
 }

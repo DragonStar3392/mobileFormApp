@@ -1,11 +1,14 @@
 package com.test.mobile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,9 +28,16 @@ import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.test.mobile.data.Item;
 import com.test.mobile.data.itemComparator;
 import com.test.mobile.data.itemTableDataAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TransportActivity extends Activity {
 
@@ -39,7 +49,7 @@ public class TransportActivity extends Activity {
     private Spinner pNoSP;
 
     private SortableTableView table;
-    private List<Item> itemList;
+    private List<Item> itemList = new ArrayList<Item>();
     private itemTableDataAdapter itemTableDataAdapter;
 
     @Override
@@ -51,6 +61,61 @@ public class TransportActivity extends Activity {
 
         pGroupSP = (Spinner) findViewById(R.id.projGspinner);
         pNoSP = (Spinner) findViewById(R.id.projNospinner);
+
+        table = (SortableTableView<String>) findViewById(R.id.transportTable);
+        initTable();
+
+        Intent intent = getIntent();
+        final String username = intent.getStringExtra("username");
+
+        //init projNo
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ArrayList<String> projNo = new ArrayList<String>();
+
+                try {
+                    //converting the string to json array object
+                    JSONArray array = new JSONArray(response);
+
+                    if(!array.isNull(0)){
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+//                        builder.setMessage("update success")
+//                                .setNegativeButton("dunno", null)
+//                                .create()
+//                                .show();
+
+                        //traversing through all the object
+                        for (int i = 0; i < array.length(); i++) {
+
+                            //getting product object from json array
+                            JSONObject product = array.getJSONObject(i);
+
+                            //populate projNo spinner,  if contain same group name
+                            if(!projNo.contains(product.getString("projNo")))
+                                projNo.add(product.getString("projNo"));
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(TransportActivity.this, android.R.layout.simple_spinner_item, projNo);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        pNoSP.setAdapter(adapter);
+                    }
+                    else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                        builder.setMessage("no project")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        transportInstallRequest projNoRequest = new transportInstallRequest(username,responseListener);
+        RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
+        queue.add(projNoRequest);
 
         //Date selection---------------------------------------------------------------------------
         mDisplayDateB.setOnClickListener(new View.OnClickListener(){
@@ -76,6 +141,7 @@ public class TransportActivity extends Activity {
                 month = month + 1;
                 String date = month + "/" + dayOfMonth + "/" + year;
                 mDisplayDate.setText(date);
+
             }
         };
         //-----------------------------------------------------------------------------------------
@@ -89,20 +155,69 @@ public class TransportActivity extends Activity {
 //            }
 //        });
 //        //-----------------------------------------------------------------------------------------
-//        pNoSP.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //-----------------------------------------------------------------------------------------
-//                ArrayAdapter pNoA = new ArrayAdapter(this,android.R.layout.simple_spinner_item,bankNames);
-//                pNoA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                //Setting the ArrayAdapter data on the Spinner
-//                pNoSP.setAdapter(pNoA);
-//            }
-//        });
-        table = (SortableTableView<String>) findViewById(R.id.transportTable);
-        initTable();
-        //update table here, firebase?
+        pNoSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //init initial data
+                Response.Listener<String> responseListener2 = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            System.out.println(response);
+                            resetTable();
+                            //converting the string to json array object
+                            JSONArray array = new JSONArray(response);
 
+                            if(!array.isNull(0)){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                                builder.setMessage("data get success")
+                                        .setNegativeButton("dunno", null)
+                                        .create()
+                                        .show();
+
+                                //traversing through all the object
+                                //System.out.println(array.length()); total items
+                                for (int i = 0; i < array.length(); i++) {
+
+                                    //getting product object from json array
+                                    JSONObject product = array.getJSONObject(i);
+                                    //populate projNo spinner
+                                    itemList.add(new Item(product.getInt("ID"),
+                                            product.getString("item"),
+                                            product.getInt("qty"),
+                                            product.getString("site"),
+                                            product.getString("warehouse"),
+                                            product.getString("location"),
+                                            product.getString("batch"),
+                                            product.getString("serial")));
+                                }
+                                builder.setMessage(itemList.toString())
+                                        .create()
+                                        .show();
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                                builder.setMessage("no data")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                transportInstallRequest projDataRequest = new transportInstallRequest(username,pNoSP.getSelectedItem().toString(),responseListener2);
+                RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
+                queue.add(projDataRequest);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 
@@ -112,32 +227,19 @@ public class TransportActivity extends Activity {
     private void initTable() {
 
         //Set the width of the table.
-        TableColumnWeightModel columnModel = new TableColumnWeightModel(7);
-        columnModel.setColumnWeight(0, 4);
-        columnModel.setColumnWeight(1, 3);
-        columnModel.setColumnWeight(2, 6);
-        columnModel.setColumnWeight(3, 4);
-        columnModel.setColumnWeight(4, 3);
-        columnModel.setColumnWeight(5, 3);
-        columnModel.setColumnWeight(6, 3);
+        TableColumnWeightModel columnModel = new TableColumnWeightModel(8);
+        columnModel.setColumnWeight(0, 2);//id
+        columnModel.setColumnWeight(1, 5);//item
+        columnModel.setColumnWeight(2, 3);//qty
+        columnModel.setColumnWeight(3, 3);//site
+        columnModel.setColumnWeight(4, 3);//warehouse
+        columnModel.setColumnWeight(5, 3);//location
+        columnModel.setColumnWeight(6, 3);//batch
+        columnModel.setColumnWeight(7, 4);//serial
         table.setColumnModel(columnModel);
 
         //Add option to table.
-        itemList = new ArrayList<Item>();
-        itemList.add(new Item(1,"Test1",3,"Bangkok","01","1","1","111"));
-        itemList.add(new Item(2,"Test2",1,"Samui","02","2","2","132"));
-        itemList.add(new Item(3,"Test3",2,"SS","02","1","2","221"));
-        itemList.add(new Item(4,"Test4",6,"S","03","4","4","512"));
-        itemList.add(new Item(5,"Test5",90,"EW","04","3","3","432"));
-        itemList.add(new Item(6,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(7,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(8,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(9,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(10,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(11,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(12,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(13,"Test6",43,"Jg","03","3","4","2322"));
-        itemList.add(new Item(14,"Test6",43,"Jg","03","3","4","2322"));
+        //itemList.add(new Item(1,"Test1",3,"Bangkok","01","1","1","111"));
 
         itemTableDataAdapter = new itemTableDataAdapter(this, itemList, table);
         table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, itemTableDataAdapter.getHeaderData()));
@@ -148,36 +250,19 @@ public class TransportActivity extends Activity {
         table.setColumnComparator(3, itemComparator.siteComparator);
         table.setColumnComparator(6, itemComparator.batchComparator);
 
-
     }
 
     /**
-     * Get the order from menu list that quantity isn't zero
-     *
-     * @param itemList List of Item (itemList)
-     * @return ArrayList of Item that quantity isn't zero
-     */
-    private ArrayList<Item> getOrderedList(List<Item> itemList) {
-        ArrayList<Item> orderList = new ArrayList<>();
-
-        for (Item item : itemList) {
-            if (item.getQuantity() != 0)
-                orderList.add(item);
-        }
-        Collections.sort(orderList, itemComparator.nameComparator);
-        return orderList;
-    }
-
-    /**
-     * Reset table quantity to 0 for all row.
+     * Reset table for all row.
      */
     private void resetTable() {
 
         for (int i = 0; i < itemList.size(); i++) {
-            itemList.get(i).setQuantity(0);
+            itemList.clear();
         }
         itemTableDataAdapter.notifyDataSetChanged();
     }
+}
 
     /**
      * Update the table by getting itemList from the server.
@@ -186,135 +271,3 @@ public class TransportActivity extends Activity {
 //        MenuDownloader menuDownloader = new MenuDownloader();
 //        menuDownloader.execute(ipVal);
 //    }
-    /**
-     * This class download the itemList from the server.
-     * url of the server that want to connect.
-     */
-//    private class MenuDownloader extends AsyncTask<String, String, String> {
-//        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-//        private String output;
-//        private boolean isSuccess = false;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            progressDialog.setMessage("Downloading menu data...");
-//            progressDialog.show();
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//
-//            HttpURLConnection connection = null;
-//            BufferedReader reader = null;
-//
-//
-//            try {
-//                URL url = new URL("http://" + params[0] + ":8080/food");
-//                connection = (HttpURLConnection) url.openConnection();
-//                connection.setConnectTimeout(2000);
-//                connection.connect();
-//
-//
-//                InputStream stream = connection.getInputStream();
-//
-//                reader = new BufferedReader(new InputStreamReader(stream));
-//
-//                StringBuffer buffer = new StringBuffer();
-//                String line = "";
-//
-//                while ((line = reader.readLine()) != null) {
-//                    buffer.append(line + "\n");
-//                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-//
-//                }
-//
-//                //output = json from server that converted to String
-//                output = buffer.toString();
-//                isSuccess = true;
-//                Thread.sleep(500);
-//
-//                return output;
-//
-//
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } finally {
-//                if (connection != null) {
-//                    connection.disconnect();
-//                }
-//                try {
-//                    if (reader != null) {
-//                        reader.close();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//            progressDialog.dismiss();
-//
-//
-//            //if not success, show the dialog and go back to WelcomeActivity
-//            if (!isSuccess) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setMessage("Error while getting menu data from server :(");
-//                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    }
-//                });
-//                builder.show();
-//                return;
-//            }
-//
-//            Log.d("GetJSONMenu", output);
-//
-//
-//            //Convert String to JSONArray and use Gson Library to itemList List.
-//            JSONArray array = null;
-//            try {
-//                array = new JSONArray(output);
-//                itemList.clear();
-//
-//                if (array.length() > 0) {
-//                    Gson gson = new Gson();
-//                    int i = 0;
-//                    while (i < array.length()) {
-//                        itemList.add(gson.fromJson(array.getJSONObject(i).toString(), FoodItem.class));
-//                        i++;
-//                    }
-//                } else {
-//                    //if no foodItem object from server
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                    builder.setMessage("There are no food in menu :(");
-//                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-//                            startActivity(intent);
-//                            finish();
-//                        }
-//                    });
-//                    builder.show();
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//            Log.d("itemList", itemList.toString());
-//            foodItemTableDataAdapter.notifyDataSetChanged();
-//        }
-//    }
-}
