@@ -27,13 +27,13 @@ public class itemTableDataAdapter extends TableDataAdapter<Item> {
 
         switch (columnIndex) {
             case 0:
-                renderedView = renderString(String.format("%d", item.getId()));
+                renderedView = renderString(item.getStatus());
                 break;
             case 1:
                 renderedView = renderString(item.getName());
                 break;
             case 2:
-                renderedView = renderString(String.format("%d", item.getQuantity()));
+                renderedView = renderString(String.format("%.2f", item.getQuantity()));
                 break;
             case 3:
                 renderedView = renderString(item.getSite());
@@ -46,8 +46,10 @@ public class itemTableDataAdapter extends TableDataAdapter<Item> {
                 break;
             case 6:
                 renderedView = renderString(item.getBatch());
+                break;
             case 7:
                 renderedView = renderString(item.getSerial());
+                break;
         }
 
         return renderedView;

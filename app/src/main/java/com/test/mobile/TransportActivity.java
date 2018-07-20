@@ -182,18 +182,18 @@ public class TransportActivity extends Activity {
                                     //getting product object from json array
                                     JSONObject product = array.getJSONObject(i);
                                     //populate projNo spinner
-                                    itemList.add(new Item(product.getInt("ID"),
+                                    itemList.add(new Item(product.getString("status"),
                                             product.getString("item"),
-                                            product.getInt("qty"),
+                                            product.getDouble("qty"),
                                             product.getString("site"),
                                             product.getString("warehouse"),
                                             product.getString("location"),
                                             product.getString("batch"),
                                             product.getString("serial")));
                                 }
-                                builder.setMessage(itemList.toString())
-                                        .create()
-                                        .show();
+//                                builder.setMessage(itemList.toString())
+//                                        .create()
+//                                        .show();
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
@@ -228,7 +228,7 @@ public class TransportActivity extends Activity {
 
         //Set the width of the table.
         TableColumnWeightModel columnModel = new TableColumnWeightModel(8);
-        columnModel.setColumnWeight(0, 2);//id
+        columnModel.setColumnWeight(0, 3);//id
         columnModel.setColumnWeight(1, 5);//item
         columnModel.setColumnWeight(2, 3);//qty
         columnModel.setColumnWeight(3, 3);//site
@@ -244,7 +244,7 @@ public class TransportActivity extends Activity {
         itemTableDataAdapter = new itemTableDataAdapter(this, itemList, table);
         table.setHeaderAdapter(new SimpleTableHeaderAdapter(this, itemTableDataAdapter.getHeaderData()));
         table.setDataAdapter(itemTableDataAdapter);
-        table.setColumnComparator(0, itemComparator.idComparator);
+        table.setColumnComparator(0, itemComparator.statusComparator);
         table.setColumnComparator(1, itemComparator.nameComparator);
         table.setColumnComparator(2, itemComparator.qtyComparator);
         table.setColumnComparator(3, itemComparator.siteComparator);

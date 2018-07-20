@@ -13,17 +13,17 @@ public class itemComparator {
         }
     };
 
-    public static Comparator<Item> idComparator = new Comparator<Item>() {
+    public static Comparator<Item> statusComparator = new Comparator<Item>() {
         @Override
         public int compare(Item o1, Item o2) {
-            return o1.getId() - (o2.getId());
+            return o1.getStatus().compareTo(o2.getStatus());
         }
     };
 
     public static Comparator<Item> qtyComparator = new Comparator<Item>() {
         @Override
         public int compare(Item o1, Item o2) {
-            return o1.getQuantity() - (o2.getQuantity());
+            return (int)o1.getQuantity() - (int)(o2.getQuantity());
         }
     };
 

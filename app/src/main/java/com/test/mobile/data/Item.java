@@ -1,19 +1,19 @@
 package com.test.mobile.data;
 
 public class Item {
-    private int id = 0;
+    private String status;
     private String name;
-    private int quantity = 0;
+    private double quantity = 0;
     private String site;
     private String WH;//warehouse
     private String location;
     private String batch;
     private String serial;
 
-    public Item(int autoNum, String name, int quantity,
+    public Item(String status, String name, double quantity,
                 String site, String WH, String location,
                 String batch, String serial) {
-        this.id = autoNum;
+        this.status = status;
         this.name = name;
         this.quantity = quantity;
         this.site = site;
@@ -23,12 +23,12 @@ public class Item {
         this.serial = serial;
     }
 
-    public int getId() {
-        return id;
+    public String getStatus() {
+        return status;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getName() {
@@ -39,7 +39,7 @@ public class Item {
         this.name = name;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
@@ -89,7 +89,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return String.format("\n%d: Item:%s, qty:%d, site:%s, WH:%s, Loc:%s, batch:%s, serial:%s",
-                id,name,quantity,site,WH,location,batch,serial);
+        return String.format("\nStatus:%s,  Item:%s, qty:%f, site:%s, WH:%s, Loc:%s, batch:%s, serial:%s",
+                status,name,quantity,site,WH,location,batch,serial);
     }
 }
