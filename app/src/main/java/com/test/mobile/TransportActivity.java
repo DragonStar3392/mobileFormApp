@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.nio.channels.NetworkChannel;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 import de.codecrafters.tableview.SortableTableView;
 import de.codecrafters.tableview.TableDataAdapter;
 import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.listeners.TableDataLongClickListener;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
@@ -64,6 +66,8 @@ public class TransportActivity extends Activity {
 
         table = (SortableTableView<String>) findViewById(R.id.transportTable);
         initTable();
+        //when user long click on row
+        table.addDataLongClickListener(new tbleDataLongClickListener());
 
         Intent intent = getIntent();
         final String username = intent.getStringExtra("username");
@@ -163,7 +167,7 @@ public class TransportActivity extends Activity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            System.out.println(response);
+                            //clear previous data
                             resetTable();
                             //converting the string to json array object
                             JSONArray array = new JSONArray(response);
@@ -182,7 +186,8 @@ public class TransportActivity extends Activity {
                                     //getting product object from json array
                                     JSONObject product = array.getJSONObject(i);
                                     //populate projNo spinner
-                                    itemList.add(new Item(product.getString("status"),
+                                    itemList.add(new Item(product.getString("ID"),
+                                            product.getString("status"),
                                             product.getString("item"),
                                             product.getDouble("qty"),
                                             product.getString("site"),
@@ -221,6 +226,82 @@ public class TransportActivity extends Activity {
 
     }
 
+    private class tbleDataLongClickListener implements TableDataLongClickListener<Item> {
+        @Override
+        public boolean onDataLongClicked(int rowIndex, Item obj) {
+            String itemStatus = obj.getStatus();
+            if(itemStatus.equals("pending")){
+                //update pending to tranferred
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println(response);
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if(success){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                                builder.setMessage("Update Success")
+                                        .create()
+                                        .show();
+
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                                builder.setMessage("Update Failed")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "transferred", responseListener);
+                RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
+                queue.add(transportUpdateStatusRequest);
+                Toast.makeText(table.getContext(), "Transferred", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if(success){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                                builder.setMessage("Update Success")
+                                        .create()
+                                        .show();
+
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                                builder.setMessage("Update Failed")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "pending", responseListener);
+                RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
+                queue.add(transportUpdateStatusRequest);
+                Toast.makeText(table.getContext(), "Pending", Toast.LENGTH_SHORT).show();
+            }
+//            AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+//            builder.setMessage(obj.getID() + ": " +itemStatus)
+//                    .create()
+//                    .show();
+            return true;
+        }
+    }
     /**
      * Initialize the Sortable table view with data from list
      */
@@ -228,7 +309,7 @@ public class TransportActivity extends Activity {
 
         //Set the width of the table.
         TableColumnWeightModel columnModel = new TableColumnWeightModel(8);
-        columnModel.setColumnWeight(0, 3);//id
+        columnModel.setColumnWeight(0, 3);//status
         columnModel.setColumnWeight(1, 5);//item
         columnModel.setColumnWeight(2, 3);//qty
         columnModel.setColumnWeight(3, 3);//site
@@ -238,7 +319,7 @@ public class TransportActivity extends Activity {
         columnModel.setColumnWeight(7, 4);//serial
         table.setColumnModel(columnModel);
 
-        //Add option to table.
+        //Add option to manually table.
         //itemList.add(new Item(1,"Test1",3,"Bangkok","01","1","1","111"));
 
         itemTableDataAdapter = new itemTableDataAdapter(this, itemList, table);

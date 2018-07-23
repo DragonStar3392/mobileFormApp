@@ -14,7 +14,7 @@ import de.codecrafters.tableview.TableView;
 public class itemTableDataAdapter extends TableDataAdapter<Item> {
     
     private static final int TEXT_SIZE = 12;
-    private static final String[] TABLE_HEADERS = {"Id","Item","Qty", "Site", "WH","Loc","Batch","Serial"};
+    private static final String[] TABLE_HEADERS = {"Status","Item","Qty", "Site", "WH","Loc","Batch","Serial"};
 
     public itemTableDataAdapter(final Context context, final List<Item> data, final TableView<Item> tableView) {
         super(context, data);

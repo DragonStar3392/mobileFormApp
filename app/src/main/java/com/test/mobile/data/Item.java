@@ -1,6 +1,7 @@
 package com.test.mobile.data;
 
 public class Item {
+    private String ID;
     private String status;
     private String name;
     private double quantity = 0;
@@ -10,9 +11,10 @@ public class Item {
     private String batch;
     private String serial;
 
-    public Item(String status, String name, double quantity,
+    public Item(String id, String status, String name, double quantity,
                 String site, String WH, String location,
                 String batch, String serial) {
+        this.ID = id;
         this.status = status;
         this.name = name;
         this.quantity = quantity;
@@ -21,6 +23,14 @@ public class Item {
         this.location = location;
         this.batch = batch;
         this.serial = serial;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getStatus() {
@@ -89,7 +99,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return String.format("\nStatus:%s,  Item:%s, qty:%f, site:%s, WH:%s, Loc:%s, batch:%s, serial:%s",
-                status,name,quantity,site,WH,location,batch,serial);
+        return String.format("\n%d: Status:%s,  Item:%s, qty:%f, site:%s, WH:%s, Loc:%s, batch:%s, serial:%s",
+                ID,status,name,quantity,site,WH,location,batch,serial);
     }
 }
