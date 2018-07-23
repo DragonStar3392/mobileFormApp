@@ -53,6 +53,7 @@ public class TransportActivity extends Activity {
     private SortableTableView table;
     private List<Item> itemList = new ArrayList<Item>();
     private itemTableDataAdapter itemTableDataAdapter;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +71,62 @@ public class TransportActivity extends Activity {
         table.addDataLongClickListener(new tbleDataLongClickListener());
 
         Intent intent = getIntent();
-        final String username = intent.getStringExtra("username");
+        username = intent.getStringExtra("username");
 
+        fillProjNo(username);
+
+        //Date selection---------------------------------------------------------------------------
+        mDisplayDateB.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        TransportActivity.this,
+                        android.R.style.Theme_Holo_Light_DarkActionBar,
+                        mDateSetListener,
+                        year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month + 1;
+                String date = month + "/" + dayOfMonth + "/" + year;
+                mDisplayDate.setText(date);
+
+            }
+        };
+        //-----------------------------------------------------------------------------------------
+//        pGroupSP.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ArrayAdapter groupA = new ArrayAdapter(this,android.R.layout.simple_spinner_item,bankNames);
+//                groupA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                //Setting the ArrayAdapter data on the Spinner
+//                pGroupSP.setAdapter(groupA);
+//            }
+//        });
+//        //-----------------------------------------------------------------------------------------
+        pNoSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                refreshTable(username);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+    private void fillProjNo(String username){
         //init projNo
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -120,131 +175,84 @@ public class TransportActivity extends Activity {
         transportInstallRequest projNoRequest = new transportInstallRequest(username,responseListener);
         RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
         queue.add(projNoRequest);
+    }
 
-        //Date selection---------------------------------------------------------------------------
-        mDisplayDateB.setOnClickListener(new View.OnClickListener(){
+    private void refreshTable(String username){
+        //init initial data
+        Response.Listener<String> responseListener2 = new Response.Listener<String>() {
             @Override
-            public void onClick(View view){
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+            public void onResponse(String response) {
+                try {
+                    //clear previous data
+                    resetTable();
+                    //converting the string to json array object
+                    JSONArray array = new JSONArray(response);
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        TransportActivity.this,
-                        android.R.style.Theme_Holo_Light_DarkActionBar,
-                        mDateSetListener,
-                        year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                String date = month + "/" + dayOfMonth + "/" + year;
-                mDisplayDate.setText(date);
+                    if(!array.isNull(0)){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                        builder.setMessage("data get success")
+                                .setNegativeButton("dunno", null)
+                                .create()
+                                .show();
 
-            }
-        };
-        //-----------------------------------------------------------------------------------------
-//        pGroupSP.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ArrayAdapter groupA = new ArrayAdapter(this,android.R.layout.simple_spinner_item,bankNames);
-//                groupA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                //Setting the ArrayAdapter data on the Spinner
-//                pGroupSP.setAdapter(groupA);
-//            }
-//        });
-//        //-----------------------------------------------------------------------------------------
-        pNoSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //init initial data
-                Response.Listener<String> responseListener2 = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //clear previous data
-                            resetTable();
-                            //converting the string to json array object
-                            JSONArray array = new JSONArray(response);
+                        //traversing through all the object
+                        //System.out.println(array.length()); total items
+                        for (int i = 0; i < array.length(); i++) {
 
-                            if(!array.isNull(0)){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
-                                builder.setMessage("data get success")
-                                        .setNegativeButton("dunno", null)
-                                        .create()
-                                        .show();
-
-                                //traversing through all the object
-                                //System.out.println(array.length()); total items
-                                for (int i = 0; i < array.length(); i++) {
-
-                                    //getting product object from json array
-                                    JSONObject product = array.getJSONObject(i);
-                                    //populate projNo spinner
-                                    itemList.add(new Item(product.getString("ID"),
-                                            product.getString("status"),
-                                            product.getString("item"),
-                                            product.getDouble("qty"),
-                                            product.getString("site"),
-                                            product.getString("warehouse"),
-                                            product.getString("location"),
-                                            product.getString("batch"),
-                                            product.getString("serial")));
-                                }
+                            //getting product object from json array
+                            JSONObject product = array.getJSONObject(i);
+                            //populate projNo spinner
+                            itemList.add(new Item(product.getString("ID"),
+                                    product.getString("status"),
+                                    product.getString("item"),
+                                    product.getDouble("qty"),
+                                    product.getString("site"),
+                                    product.getString("warehouse"),
+                                    product.getString("location"),
+                                    product.getString("batch"),
+                                    product.getString("serial")));
+                        }
 //                                builder.setMessage(itemList.toString())
 //                                        .create()
 //                                        .show();
-                            }
-                            else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
-                                builder.setMessage("no data")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     }
-                };
-
-                transportInstallRequest projDataRequest = new transportInstallRequest(username,pNoSP.getSelectedItem().toString(),responseListener2);
-                RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
-                queue.add(projDataRequest);
+                    else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                        builder.setMessage("no data")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+        };
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        transportInstallRequest projDataRequest = new transportInstallRequest(username,pNoSP.getSelectedItem().toString(),responseListener2);
+        RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
+        queue.add(projDataRequest);
     }
 
     private class tbleDataLongClickListener implements TableDataLongClickListener<Item> {
         @Override
         public boolean onDataLongClicked(int rowIndex, Item obj) {
             String itemStatus = obj.getStatus();
-            if(itemStatus.equals("pending")){
+            if(itemStatus.equals("Pending")){
                 //update pending to tranferred
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response);
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if(success){
                                 AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
                                 builder.setMessage("Update Success")
+                                        .setPositiveButton("OK",null)
                                         .create()
                                         .show();
-
+                                refreshTable(username);
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
@@ -259,7 +267,7 @@ public class TransportActivity extends Activity {
                     }
                 };
 
-                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "transferred", responseListener);
+                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "Transferred", responseListener);
                 RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
                 queue.add(transportUpdateStatusRequest);
                 Toast.makeText(table.getContext(), "Transferred", Toast.LENGTH_SHORT).show();
@@ -274,9 +282,10 @@ public class TransportActivity extends Activity {
                             if(success){
                                 AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
                                 builder.setMessage("Update Success")
+                                        .setPositiveButton("OK",null)
                                         .create()
                                         .show();
-
+                                refreshTable(username);
                             }
                             else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
@@ -290,15 +299,11 @@ public class TransportActivity extends Activity {
                         }
                     }
                 };
-                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "pending", responseListener);
+                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "Pending", responseListener);
                 RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
                 queue.add(transportUpdateStatusRequest);
                 Toast.makeText(table.getContext(), "Pending", Toast.LENGTH_SHORT).show();
             }
-//            AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
-//            builder.setMessage(obj.getID() + ": " +itemStatus)
-//                    .create()
-//                    .show();
             return true;
         }
     }
