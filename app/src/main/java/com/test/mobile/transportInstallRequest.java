@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class transportInstallRequest extends StringRequest {
-    private static final String PRJNO_REQUEST_URL = "http://10.0.2.2/getTransportProjNo.php";
-    private static final String TRANSPORT_DATA_REQUEST_URL = "http://10.0.2.2/getTransportData.php";
+    private static final String PRJNO_REQUEST_URL = "http://10.0.2.2/getProjNo.php";
+    private static final String TABLE_DATA_REQUEST_URL = "http://10.0.2.2/getData.php";
     private Map<String, String> params;
 
     public transportInstallRequest(String username, Response.Listener<String> listener) {
@@ -18,7 +18,7 @@ public class transportInstallRequest extends StringRequest {
     }
 
     public transportInstallRequest(String username, String projNo, Response.Listener<String> listener){
-        super(Method.POST, TRANSPORT_DATA_REQUEST_URL, listener, null);
+        super(Method.POST, TABLE_DATA_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("username",username);
         params.put("projNo", projNo);

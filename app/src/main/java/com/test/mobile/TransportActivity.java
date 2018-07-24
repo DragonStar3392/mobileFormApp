@@ -16,18 +16,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.nio.channels.NetworkChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import de.codecrafters.tableview.SortableTableView;
-import de.codecrafters.tableview.TableDataAdapter;
-import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataLongClickListener;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 import com.android.volley.RequestQueue;
@@ -267,12 +262,12 @@ public class TransportActivity extends Activity {
                     }
                 };
 
-                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "Transferred", responseListener);
+                updateTableStatusRequest updateTableStatusRequest = new updateTableStatusRequest(obj.getID(), "Transferred", responseListener);
                 RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
-                queue.add(transportUpdateStatusRequest);
+                queue.add(updateTableStatusRequest);
                 Toast.makeText(table.getContext(), "Transferred", Toast.LENGTH_SHORT).show();
             }
-            else {
+            else if(itemStatus.equals("Transferred")){
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -299,10 +294,24 @@ public class TransportActivity extends Activity {
                         }
                     }
                 };
-                transportUpdateStatusRequest transportUpdateStatusRequest = new transportUpdateStatusRequest(obj.getID(), "Pending", responseListener);
+                updateTableStatusRequest updateTableStatusRequest = new updateTableStatusRequest(obj.getID(), "Pending", responseListener);
                 RequestQueue queue = Volley.newRequestQueue(TransportActivity.this);
-                queue.add(transportUpdateStatusRequest);
+                queue.add(updateTableStatusRequest);
                 Toast.makeText(table.getContext(), "Pending", Toast.LENGTH_SHORT).show();
+            }
+            else if(itemStatus.equals("Install")){
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                builder.setMessage("Cannot change status")
+                        .setNegativeButton("OK", null)
+                        .create()
+                        .show();
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransportActivity.this);
+                builder.setMessage("Something wrong with status data")
+                        .setNegativeButton("Retry", null)
+                        .create()
+                        .show();
             }
             return true;
         }
