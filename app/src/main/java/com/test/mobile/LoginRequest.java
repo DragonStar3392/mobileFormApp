@@ -1,5 +1,9 @@
 package com.test.mobile;
 
+/**
+ * Send a request to server with instructions from login.php
+ */
+
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 

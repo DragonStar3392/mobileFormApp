@@ -15,6 +15,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Login action
+ */
 
 public class LoginActivity extends Activity  {
     Button loginB;

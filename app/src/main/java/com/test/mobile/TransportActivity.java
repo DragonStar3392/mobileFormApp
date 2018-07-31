@@ -121,6 +121,10 @@ public class TransportActivity extends Activity {
         });
 
     }
+
+    /**
+     * fill data from server into table
+     */
     private void fillProjNo(String username){
         //init projNo
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -172,6 +176,9 @@ public class TransportActivity extends Activity {
         queue.add(projNoRequest);
     }
 
+    /**
+     * update/refresh table when status changes
+     */
     private void refreshTable(String username){
         //init initial data
         Response.Listener<String> responseListener2 = new Response.Listener<String>() {
@@ -229,6 +236,9 @@ public class TransportActivity extends Activity {
         queue.add(projDataRequest);
     }
 
+    /**
+     * change item status when longClick on the row
+     */
     private class tbleDataLongClickListener implements TableDataLongClickListener<Item> {
         @Override
         public boolean onDataLongClicked(int rowIndex, Item obj) {
@@ -316,6 +326,7 @@ public class TransportActivity extends Activity {
             return true;
         }
     }
+
     /**
      * Initialize the Sortable table view with data from list
      */
