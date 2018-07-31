@@ -359,10 +359,3 @@ public class TransportActivity extends Activity {
     }
 }
 
-    /**
-     * Update the table by getting itemList from the server.
-     */
-//    private void updateTableMenu() {
-//        MenuDownloader menuDownloader = new MenuDownloader();
-//        menuDownloader.execute(ipVal);
-//    }

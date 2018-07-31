@@ -3,8 +3,9 @@ package com.test.mobile.data;
 import java.util.Comparator;
 
 /**
- * Comparator for foodItem Object
+ * Comparator for Item Object
  */
+
 public class itemComparator {
     public static Comparator<Item> nameComparator = new Comparator<Item>() {
         @Override

@@ -1,5 +1,10 @@
 package com.test.mobile.data;
 
+/**
+ * Item object for storing single item.
+ * Created by Shu/DragonStar3392.
+ */
+
 public class Item {
     private String ID;
     private String status;

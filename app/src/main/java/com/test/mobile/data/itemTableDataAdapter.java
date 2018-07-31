@@ -11,6 +11,8 @@ import java.util.List;
 import de.codecrafters.tableview.TableDataAdapter;
 import de.codecrafters.tableview.TableView;
 
+/** Table adapter **/
+
 public class itemTableDataAdapter extends TableDataAdapter<Item> {
     
     private static final int TEXT_SIZE = 12;
